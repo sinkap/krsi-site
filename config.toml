@@ -1,6 +1,6 @@
 # hugo server --minify --themesDir ... --baseURL=http://0.0.0.0:1313/example
 
-baseURL = 'https://kpsingh.ch/linux-krsi'
+baseURL = 'https://krsi.kpsingh.ch'
 title = 'KRSI'
 theme = 'hugo-book'
 disableKinds = ['taxonomy', 'taxonomyTerm']
