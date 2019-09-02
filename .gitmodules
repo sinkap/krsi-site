@@ -1,0 +1,7 @@
+[submodule "themes/hugo-book"]
+	path = themes/hugo-book
+	url = git@github.com:sinkap/hugo-book.git
+[submodule "public"]
+	path = public
+	url = git@github.com:sinkap/linux-krsi.git
+	branch = gh-pages
