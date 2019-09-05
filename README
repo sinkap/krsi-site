@@ -33,6 +33,9 @@ eco-system by enabling feedback from the security community about the kind of
 behaviours that the LSM should be targeting.
 
 
+NOTE: The cover letter will be assimilated into the documentation
+(Documentation/security/) as a part of the patch series.
+
 # How does it work?
 
 ## SecurityFS Interface
@@ -79,7 +82,8 @@ program opens the securityfs file and the eBPF program (`BPF_PROG_LOAD`) and
 attaches (`BPF_PROG_ATTACH`) the eBPF program to the hook.
 
 	hook_fd = open("/sys/kernel/security/krsi/process_execution", O_RDWR)
-prog_fd = bpf(BPF_PROG_LOAD, ...) bpf(BPF_PROG_ATTACH, hook_fd, prog_fd)
+	prog_fd = bpf(BPF_PROG_LOAD, ...)
+	bpf(BPF_PROG_ATTACH, hook_fd, prog_fd)
 
 There can be more than one program attached to a hook and attaching a program
 with the same name replaces the existing program. The user can see the programs
@@ -89,20 +93,18 @@ attached to the hook as follows:
 
 ## Audit / MAC Policy
 
-A privileged user-space program (`CAP_MAC_ADMIN` for modifying MAC policies)
-communicates the policy to the KRSI eBPF programs using eBPF maps (of course,
-it's also possible to embed the policy in the eBPF program).
+The userspace controls the policy by installing eBPF programs to the LSM hook.
+If any of the attached eBPF programs return an error (-ENOPERM), the action
+represented by the hook is denied.
 
 The audit logs are written using a format chosen by the eBPF program to the perf
-events buffer (using `bpf_perf_event_output`) and can be further processed in
+events buffer (using bpf_perf_event_output) and can be further processed in
 user-space.
 
-If any of the eBPF programs return an error (`-ENOPERM`) the action represented
-by the hook is denied.
 
 ## Current Status
 
-The patch series provides a proto-type implementation with a few helpers and a
+The RFC provides a proto-type implementation with a few helpers and a
 sample program samples/bpf/krsi_kern.c that hooks into process execution and
 logs specific environment variables to the
 perf events buffer.
